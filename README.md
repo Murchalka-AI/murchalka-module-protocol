@@ -11,6 +11,19 @@ dotnet restore --locked-mode
 dotnet test --no-restore
 ```
 
+## CI and releases
+
+GitHub Actions validates the solution on Linux, Windows, and macOS. Pull requests and pushes to `main` run locked restore, Release build, tests, and a NuGet packaging check. The resulting CI packages are retained as workflow artifacts for 14 days.
+
+Pushing a SemVer tag publishes all five protocol packages to GitHub Packages and creates or updates a GitHub Release with the `.nupkg` files attached:
+
+```sh
+git tag v0.1.12
+git push origin v0.1.12
+```
+
+Tags may use `vX.Y.Z` or `vX.Y.Z-prerelease`. The tag version is applied to every package so the protocol package set is always released atomically with one version. Publishing uses the repository `GITHUB_TOKEN`; no long-lived package secret is stored in the repository.
+
 The supported wire protocol major is `1`. Unknown protocol or schema majors fail closed. See [Compatibility policy](docs/compatibility-policy.md) and [ADR-0001](docs/adr/0001-module-protocol-and-transport.md).
 
 ## Canonical schemas
