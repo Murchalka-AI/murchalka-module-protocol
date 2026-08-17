@@ -10,7 +10,7 @@
     <Deterministic>true</Deterministic>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DebugType>embedded</DebugType>
-    <RepositoryUrl>https://github.com/murchalka/murchalka-module-protocol</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Murchalka-AI/murchalka-module-protocol</RepositoryUrl>
     <PackageVersion>0.1.12</PackageVersion>
     <Authors>Murchalka</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
