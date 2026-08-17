@@ -1,0 +1,20 @@
+apiVersion: bindings.murchalka.dev/v1
+kind: ModuleBindings
+metadata:
+  installation: home-primary
+  revision: 1
+bindings:
+  - id: hello-audit
+    consumer:
+      module: dev.murchalka.hello
+      requirement: audit
+    scope:
+      type: global
+    provider:
+      module: dev.murchalka.audit
+      capability: audit.record
+      instance: default
+policies:
+  ambiguity: fail
+  missingScopedBinding: inheritParent
+  providerUnavailable: failoverOnlyIfDeclared

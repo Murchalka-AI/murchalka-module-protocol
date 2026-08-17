@@ -1,0 +1,22 @@
+apiVersion: security.murchalka.dev/v1
+kind: ModulePermissionGrant
+metadata:
+  grantId: grant-01
+  module: dev.murchalka.hello
+  moduleVersionRange: ">=1.0.0 <2.0.0"
+  bundleDigest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  issuedAt: 2026-08-17T10:00:00Z
+  expiresAt: null
+  issuedBy: admin-owner
+grant:
+  data:
+    read: []
+    write: []
+  capabilities:
+    invoke: [audit.record]
+constraints:
+  tenants: [home]
+  maxConcurrentInvocations: 2
+signature:
+  keyId: installation-admin
+  value: QUFBQUFBQUFBQUFBQUFBQQ==

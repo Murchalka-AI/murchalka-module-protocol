@@ -1,0 +1,19 @@
+apiVersion: profiles.murchalka.dev/v1
+kind: RuntimeProfile
+metadata:
+  id: core
+  version: 1.0.0
+modules:
+  required:
+    - id: dev.murchalka.hello
+      version: ">=1.0.0 <2.0.0"
+  optional: []
+bindings: []
+permissionsPolicy:
+  trustedPublishers: [dev.murchalka]
+  autoApprove:
+    dataClasses: [internal]
+    network: []
+activation:
+  autoInstallMissingFromRegistry: false
+  autoUpdateChannel: stable

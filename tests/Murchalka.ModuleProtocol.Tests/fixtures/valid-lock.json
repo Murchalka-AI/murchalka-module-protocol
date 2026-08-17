@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "module": {
+    "id": "dev.murchalka.hello",
+    "version": "1.0.0",
+    "bundleDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "resolvedAt": "2026-08-17T10:00:00Z",
+  "runtimeVersion": "1.0.0",
+  "dependencies": [],
+  "artifacts": [{ "target": "runtime", "id": "hello-process", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }],
+  "contracts": [{ "id": "hello.greet", "version": "1.0.0", "schemaDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }]
+}

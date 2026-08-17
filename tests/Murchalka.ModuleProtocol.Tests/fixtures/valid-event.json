@@ -1,0 +1,18 @@
+{
+  "eventId": "078ff6a9-cbab-42f3-8c6f-55ec18b5883a",
+  "topic": "hello.greeted",
+  "schemaVersion": 1,
+  "producerModule": "dev.murchalka.hello",
+  "producerInstance": "default",
+  "occurredAt": "2026-08-17T10:00:00Z",
+  "publishedAt": "2026-08-17T10:00:01Z",
+  "tenantId": "home",
+  "actorRef": "person:owner",
+  "correlationId": "078ff6a9-cbab-42f3-8c6f-55ec18b5883a",
+  "causationId": null,
+  "partitionKey": "person:owner",
+  "dataClassification": "personal",
+  "purpose": "greeting",
+  "payloadSchema": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "payload": { "message": "hello" }
+}

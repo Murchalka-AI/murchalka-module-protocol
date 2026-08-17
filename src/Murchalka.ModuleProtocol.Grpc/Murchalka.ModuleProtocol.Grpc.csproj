@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Murchalka.ModuleProtocol.Grpc</PackageId>
+    <Description>Canonical gRPC wire contract for the Murchalka Module Protocol.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" />
+    <PackageReference Include="Grpc.Core.Api" />
+    <PackageReference Include="Grpc.Tools" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="Protos/module_protocol_v1.proto" GrpcServices="Both" />
+  </ItemGroup>
+</Project>

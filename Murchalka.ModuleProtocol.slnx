@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="Murchalka.ModuleProtocol.sln.DotSettings" />
+    <File Path="NuGet.Config" />
+    <File Path="README.md" />
+    <File Path="SECURITY.md" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Murchalka.ModuleProtocol.Contracts/Murchalka.ModuleProtocol.Contracts.csproj" />
+    <Project Path="src/Murchalka.ModuleProtocol.Grpc/Murchalka.ModuleProtocol.Grpc.csproj" />
+    <Project Path="src/Murchalka.ModuleProtocol.Json/Murchalka.ModuleProtocol.Json.csproj" />
+    <Project Path="src/Murchalka.ModuleProtocol.Transport/Murchalka.ModuleProtocol.Transport.csproj" />
+    <Project Path="src/Murchalka.ModuleProtocol.Client/Murchalka.ModuleProtocol.Client.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Murchalka.ModuleProtocol.Tests/Murchalka.ModuleProtocol.Tests.csproj" />
+  </Folder>
+</Solution>

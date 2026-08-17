@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Murchalka.ModuleProtocol.Json</PackageId>
+    <Description>JSON/YAML codecs and canonical schema validation for Murchalka modules.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Murchalka.ModuleProtocol.Contracts/Murchalka.ModuleProtocol.Contracts.csproj" />
+    <PackageReference Include="JsonSchema.Net" />
+    <PackageReference Include="YamlDotNet" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../schemas/*.schema.json" Pack="true" PackagePath="schemas" CopyToOutputDirectory="PreserveNewest" Link="schemas/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="../../schemas/*.schema.json" LogicalName="Murchalka.ModuleProtocol.Schemas.%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

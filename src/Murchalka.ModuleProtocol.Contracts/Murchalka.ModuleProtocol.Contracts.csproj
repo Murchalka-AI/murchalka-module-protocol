@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Murchalka.ModuleProtocol.Contracts</PackageId>
+    <Description>Transport-neutral Murchalka Module Protocol contracts.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>

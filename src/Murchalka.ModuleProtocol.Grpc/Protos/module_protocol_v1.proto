@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+package murchalka.moduleprotocol.v1;
+option csharp_namespace = "Murchalka.ModuleProtocol.Grpc.V1";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service ModuleProtocol {
+  rpc Connect(stream ModuleToRuntime) returns (stream RuntimeToModule);
+  rpc Invoke(CapabilityInvocation) returns (CapabilityResult);
+  rpc ObserveHealth(google.protobuf.Empty) returns (stream HealthStatus);
+}
+
+message ModuleToRuntime {
+  oneof message {
+    ModuleHello hello = 1;
+    ModuleProof proof = 2;
+    ModuleReady ready = 3;
+    ControlResult control_result = 4;
+    HealthStatus health = 5;
+  }
+}
+
+message RuntimeToModule {
+  oneof message {
+    RuntimeChallenge challenge = 1;
+    JsonSnapshot configuration = 2;
+    JsonSnapshot permission_grant = 3;
+    DependencyEndpoints dependencies = 4;
+    ControlMessage control = 5;
+  }
+}
+
+message ModuleHello {
+  string module_id = 1;
+  string module_version = 2;
+  string bundle_digest = 3;
+  string instance_id = 4;
+  repeated uint32 protocol_versions = 5;
+  string artifact_id = 6;
+  ModuleTarget target = 7;
+  string process_identity = 8;
+  string declared_capabilities_digest = 9;
+  string nonce = 10;
+}
+
+enum ModuleTarget {
+  MODULE_TARGET_UNSPECIFIED = 0;
+  MODULE_TARGET_RUNTIME = 1;
+  MODULE_TARGET_NODE = 2;
+  MODULE_TARGET_CLIENT = 3;
+}
+
+message RuntimeChallenge {
+  uint32 selected_protocol_version = 1;
+  string runtime_nonce = 2;
+  string module_nonce = 3;
+  string proof_algorithm = 4;
+  google.protobuf.Timestamp issued_at = 5;
+  google.protobuf.Timestamp expires_at = 6;
+}
+
+message ModuleProof {
+  string module_id = 1;
+  string instance_id = 2;
+  string runtime_nonce = 3;
+  string module_nonce = 4;
+  string proof = 5;
+}
+
+message JsonSnapshot {
+  uint64 revision = 1;
+  string schema_digest = 2;
+  bytes json = 3;
+}
+
+message DependencyEndpoint {
+  string requirement_id = 1;
+  string provider_module = 2;
+  string provider_version = 3;
+  string capability = 4;
+  string capability_version = 5;
+  string provider_instance = 6;
+  string endpoint = 7;
+  string authorization_reference = 8;
+}
+
+message DependencyEndpoints {
+  uint64 binding_revision = 1;
+  repeated DependencyEndpoint endpoints = 2;
+}
+
+message ModuleReady {
+  string module_id = 1;
+  string instance_id = 2;
+  string effective_capabilities_digest = 3;
+  google.protobuf.Timestamp ready_at = 4;
+}
+
+message ControlMessage {
+  string operation_id = 1;
+  ControlKind kind = 2;
+  google.protobuf.Timestamp deadline = 3;
+  bytes json_payload = 4;
+}
+
+enum ControlKind {
+  CONTROL_KIND_UNSPECIFIED = 0;
+  CONTROL_KIND_START = 1;
+  CONTROL_KIND_DRAIN = 2;
+  CONTROL_KIND_STOP = 3;
+  CONTROL_KIND_RELOAD_CONFIGURATION = 4;
+  CONTROL_KIND_UPDATE_BINDINGS = 5;
+  CONTROL_KIND_UPDATE_GRANT = 6;
+  CONTROL_KIND_HEALTH_PROBE = 7;
+  CONTROL_KIND_EXPORT_STATE = 8;
+  CONTROL_KIND_PREPARE_MIGRATION = 9;
+  CONTROL_KIND_COMMIT_MIGRATION = 10;
+  CONTROL_KIND_ROLLBACK_MIGRATION = 11;
+  CONTROL_KIND_ACTIVATE = 12;
+}
+
+message ControlResult {
+  string operation_id = 1;
+  bool succeeded = 2;
+  string error_code = 3;
+  string error_message = 4;
+  bytes json_details = 5;
+}
+
+message CapabilityInvocation {
+  string invocation_id = 1;
+  string capability_id = 2;
+  string capability_version = 3;
+  string provider_instance = 4;
+  string consumer_module_id = 5;
+  string actor_reference = 6;
+  bytes scope_json = 7;
+  string purpose = 8;
+  string authorization_grant_reference = 9;
+  string trace_id = 10;
+  string correlation_id = 11;
+  string causation_id = 12;
+  google.protobuf.Timestamp deadline = 13;
+  string idempotency_key = 14;
+  string payload_schema = 15;
+  bytes payload_json = 16;
+  string content_reference = 17;
+}
+
+message CapabilityResult {
+  string invocation_id = 1;
+  InvocationStatus status = 2;
+  bytes payload_json = 3;
+  ProtocolError error = 4;
+  bytes usage_json = 5;
+  repeated string evidence_references = 6;
+  repeated string artifact_references = 7;
+  string provider_receipt = 8;
+}
+
+enum InvocationStatus {
+  INVOCATION_STATUS_UNSPECIFIED = 0;
+  INVOCATION_STATUS_SUCCEEDED = 1;
+  INVOCATION_STATUS_FAILED = 2;
+  INVOCATION_STATUS_CANCELLED = 3;
+  INVOCATION_STATUS_DEADLINE_EXCEEDED = 4;
+  INVOCATION_STATUS_REJECTED = 5;
+}
+
+message ProtocolError {
+  string code = 1;
+  string category = 2;
+  bool retryable = 3;
+  string message = 4;
+  bytes json_details = 5;
+}
+
+message HealthStatus {
+  string status = 1;
+  google.protobuf.Timestamp observed_at = 2;
+  repeated string reason_codes = 3;
+}

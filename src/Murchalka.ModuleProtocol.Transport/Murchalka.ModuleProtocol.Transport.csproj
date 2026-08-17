@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Murchalka.ModuleProtocol.Transport</PackageId>
+    <Description>Bounded transport abstractions for the Murchalka Module Protocol.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Murchalka.ModuleProtocol.Contracts/Murchalka.ModuleProtocol.Contracts.csproj" />
+  </ItemGroup>
+</Project>

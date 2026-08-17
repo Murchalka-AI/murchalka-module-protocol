@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.murchalka.dev/v1/event-envelope.schema.json",
+  "title": "Murchalka Event Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "topic", "schemaVersion", "producerModule", "producerInstance", "occurredAt", "publishedAt", "correlationId", "partitionKey", "dataClassification", "purpose", "payloadSchema", "payload"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "topic": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "producerModule": { "$ref": "#/$defs/moduleId" },
+    "producerInstance": { "$ref": "#/$defs/instanceId" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "tenantId": { "type": ["string", "null"], "minLength": 1, "maxLength": 128 },
+    "actorRef": { "type": ["string", "null"], "minLength": 1, "maxLength": 256 },
+    "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "causationId": { "type": ["string", "null"], "minLength": 1, "maxLength": 128 },
+    "partitionKey": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "dataClassification": { "enum": ["public", "internal", "personal", "sensitive", "restricted"] },
+    "purpose": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+    "payloadSchema": { "$ref": "#/$defs/sha256" },
+    "payload": {},
+    "extensions": { "$ref": "#/$defs/extensions" }
+  },
+  "$defs": {
+    "moduleId": { "type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$", "maxLength": 253 },
+    "instanceId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "extensions": { "type": "object", "propertyNames": { "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z0-9][a-z0-9.-]*$" }, "additionalProperties": true }
+  }
+}

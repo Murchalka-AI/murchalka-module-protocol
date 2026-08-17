@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.murchalka.dev/v1/binding.schema.json",
+  "title": "Murchalka Module Bindings v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "metadata", "bindings", "policies"],
+  "properties": {
+    "apiVersion": { "const": "bindings.murchalka.dev/v1" },
+    "kind": { "const": "ModuleBindings" },
+    "metadata": {
+      "type": "object", "additionalProperties": false, "required": ["installation", "revision"],
+      "properties": { "installation": { "$ref": "#/$defs/localId" }, "revision": { "type": "integer", "minimum": 1 } }
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["id", "consumer", "scope", "provider"],
+        "properties": {
+          "id": { "$ref": "#/$defs/localId" },
+          "consumer": {
+            "type": "object", "additionalProperties": false, "required": ["module", "requirement"],
+            "properties": { "module": { "$ref": "#/$defs/moduleId" }, "requirement": { "$ref": "#/$defs/localId" } }
+          },
+          "scope": {
+            "type": "object", "additionalProperties": false, "required": ["type"],
+            "properties": { "type": { "enum": ["global", "tenant", "workspace", "person", "group", "module", "node", "session"] }, "id": { "type": "string", "minLength": 1, "maxLength": 256 } },
+            "allOf": [
+              { "if": { "properties": { "type": { "const": "global" } }, "required": ["type"] }, "then": { "not": { "required": ["id"] } } },
+              { "if": { "properties": { "type": { "enum": ["tenant", "workspace", "person", "group", "module", "node", "session"] } }, "required": ["type"] }, "then": { "required": ["id"] } }
+            ]
+          },
+          "provider": { "$ref": "#/$defs/providerSelection" }
+        }
+      }
+    },
+    "policies": {
+      "type": "object", "additionalProperties": false, "required": ["ambiguity", "missingScopedBinding", "providerUnavailable"],
+      "properties": {
+        "ambiguity": { "const": "fail" },
+        "missingScopedBinding": { "enum": ["fail", "inheritParent"] },
+        "providerUnavailable": { "enum": ["fail", "failoverOnlyIfDeclared"] }
+      }
+    },
+    "extensions": { "$ref": "#/$defs/extensions" }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object", "additionalProperties": false, "required": ["module", "capability", "instance"],
+      "properties": { "module": { "$ref": "#/$defs/moduleId" }, "capability": { "$ref": "#/$defs/capabilityId" }, "instance": { "$ref": "#/$defs/instanceId" } }
+    },
+    "providerSelection": {
+      "oneOf": [
+        { "$ref": "#/$defs/provider" },
+        {
+          "type": "object", "additionalProperties": false, "required": ["primary", "failover", "failoverPolicy"],
+          "properties": {
+            "primary": { "$ref": "#/$defs/provider" },
+            "failover": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/provider" } },
+            "failoverPolicy": {
+              "type": "object", "additionalProperties": false, "required": ["allowedDataClasses", "maxAttempts"],
+              "properties": {
+                "allowedDataClasses": { "type": "array", "uniqueItems": true, "items": { "enum": ["public", "internal", "personal", "sensitive", "restricted"] } },
+                "maxAttempts": { "type": "integer", "minimum": 1, "maximum": 10 }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "moduleId": { "type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$", "maxLength": 253 },
+    "capabilityId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "localId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+    "instanceId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "extensions": { "type": "object", "propertyNames": { "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z0-9][a-z0-9.-]*$" }, "additionalProperties": true }
+  }
+}

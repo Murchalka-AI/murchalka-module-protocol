@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1507</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Murchalka.ModuleProtocol.Json/Murchalka.ModuleProtocol.Json.csproj" />
+    <ProjectReference Include="../../src/Murchalka.ModuleProtocol.Transport/Murchalka.ModuleProtocol.Transport.csproj" />
+    <ProjectReference Include="../../src/Murchalka.ModuleProtocol.Client/Murchalka.ModuleProtocol.Client.csproj" />
+    <ProjectReference Include="../../src/Murchalka.ModuleProtocol.Grpc/Murchalka.ModuleProtocol.Grpc.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../schemas/*.schema.json" CopyToOutputDirectory="PreserveNewest" Link="schemas/%(Filename)%(Extension)" />
+    <None Include="fixtures/**/*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

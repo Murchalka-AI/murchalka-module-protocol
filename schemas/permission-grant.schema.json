@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.murchalka.dev/v1/permission-grant.schema.json",
+  "title": "Murchalka Module Permission Grant v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "metadata", "grant", "constraints", "signature"],
+  "properties": {
+    "apiVersion": { "const": "security.murchalka.dev/v1" },
+    "kind": { "const": "ModulePermissionGrant" },
+    "metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["grantId", "module", "moduleVersionRange", "bundleDigest", "issuedAt", "expiresAt", "issuedBy"],
+      "properties": {
+        "grantId": { "$ref": "#/$defs/localId" }, "module": { "$ref": "#/$defs/moduleId" }, "moduleVersionRange": { "$ref": "#/$defs/versionRange" },
+        "bundleDigest": { "$ref": "#/$defs/sha256" }, "issuedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": ["string", "null"], "format": "date-time" }, "issuedBy": { "type": "string", "minLength": 1, "maxLength": 256 }
+      }
+    },
+    "grant": { "$ref": "#/$defs/permissions" },
+    "constraints": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "tenants": { "$ref": "#/$defs/stringSet" }, "projects": { "$ref": "#/$defs/stringSet" },
+        "maxConcurrentInvocations": { "type": "integer", "minimum": 1 }, "maxCpu": { "type": "string", "pattern": "^[1-9][0-9]*(?:m)?$" },
+        "maxMemory": { "type": "string", "pattern": "^[1-9][0-9]*(?:Ki|Mi|Gi|Ti)$" }
+      }
+    },
+    "signature": {
+      "type": "object", "additionalProperties": false, "required": ["keyId", "value"],
+      "properties": { "keyId": { "type": "string", "minLength": 1, "maxLength": 256 }, "value": { "type": "string", "contentEncoding": "base64", "minLength": 16 } }
+    },
+    "extensions": { "$ref": "#/$defs/extensions" }
+  },
+  "$defs": {
+    "permissions": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "network": { "type": "object", "additionalProperties": false, "properties": { "outbound": { "type": "array", "items": { "$ref": "#/$defs/networkRule" } } } },
+        "secrets": { "type": "array", "items": { "$ref": "#/$defs/secretGrant" } },
+        "data": { "type": "object", "additionalProperties": false, "properties": { "read": { "$ref": "#/$defs/stringSet" }, "write": { "$ref": "#/$defs/stringSet" } } },
+        "capabilities": { "type": "object", "additionalProperties": false, "properties": { "invoke": { "type": "array", "items": { "oneOf": [ { "$ref": "#/$defs/capabilityId" }, { "type": "object", "additionalProperties": false, "required": ["category"], "properties": { "category": { "$ref": "#/$defs/capabilityId" } } } ] } } } },
+        "filesystem": { "type": "object", "additionalProperties": false, "properties": { "read": { "$ref": "#/$defs/stringSet" }, "write": { "$ref": "#/$defs/stringSet" } } },
+        "nodes": { "type": "object", "additionalProperties": false, "properties": { "invokeCategories": { "$ref": "#/$defs/stringSet" } } }
+      }
+    },
+    "networkRule": {
+      "type": "object", "additionalProperties": false, "required": ["scheme", "host", "ports"],
+      "properties": { "scheme": { "enum": ["https", "wss", "grpc+tls"] }, "host": { "type": "string", "format": "hostname" }, "ports": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 1, "maximum": 65535 } } }
+    },
+    "secretGrant": {
+      "type": "object", "additionalProperties": false, "required": ["reference", "operations", "delivery"],
+      "properties": { "reference": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]{0,255}$" }, "operations": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["read", "use"] } }, "delivery": { "enum": ["brokerHandle", "rawEnvironmentLegacy"] } }
+    },
+    "moduleId": { "type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$", "maxLength": 253 },
+    "capabilityId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "localId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+    "versionRange": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "stringSet": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 256 } },
+    "extensions": { "type": "object", "propertyNames": { "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z0-9][a-z0-9.-]*$" }, "additionalProperties": true }
+  }
+}
