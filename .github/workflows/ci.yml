@@ -38,10 +38,12 @@ jobs:
         with:
           global-json-file: global.json
           cache: true
-          cache-dependency-path: '**/packages.lock.json'
+          cache-dependency-path: |
+            Directory.Packages.props
+            **/*.csproj
 
-      - name: Restore locked dependencies
-        run: dotnet restore Murchalka.ModuleProtocol.slnx --locked-mode
+      - name: Restore dependencies
+        run: dotnet restore Murchalka.ModuleProtocol.slnx
 
       - name: Build
         run: dotnet build Murchalka.ModuleProtocol.slnx --configuration Release --no-restore
@@ -65,10 +67,12 @@ jobs:
         with:
           global-json-file: global.json
           cache: true
-          cache-dependency-path: '**/packages.lock.json'
+          cache-dependency-path: |
+            Directory.Packages.props
+            **/*.csproj
 
-      - name: Restore locked dependencies
-        run: dotnet restore Murchalka.ModuleProtocol.slnx --locked-mode
+      - name: Restore dependencies
+        run: dotnet restore Murchalka.ModuleProtocol.slnx
 
       - name: Build
         run: dotnet build Murchalka.ModuleProtocol.slnx --configuration Release --no-restore

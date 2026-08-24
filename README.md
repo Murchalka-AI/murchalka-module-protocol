@@ -7,7 +7,7 @@ It publishes transport-neutral contracts, JSON and gRPC representations, compati
 ## Build
 
 ```sh
-dotnet restore --locked-mode
+dotnet restore
 dotnet test --no-restore
 ```
 

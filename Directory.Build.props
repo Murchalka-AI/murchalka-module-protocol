@@ -8,7 +8,6 @@
     <NoWarn>$(NoWarn);NU1507;NU1900</NoWarn>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
     <Deterministic>true</Deterministic>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DebugType>embedded</DebugType>
     <RepositoryUrl>https://github.com/Murchalka-AI/murchalka-module-protocol</RepositoryUrl>
     <PackageVersion>0.1.12</PackageVersion>
