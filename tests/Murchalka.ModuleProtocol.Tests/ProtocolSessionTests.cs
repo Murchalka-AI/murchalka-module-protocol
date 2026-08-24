@@ -55,7 +55,11 @@ public sealed class ProtocolSessionTests
     {
         await using var stream = new MemoryStream();
         await Assert.ThrowsAsync<InvalidDataException>(async () =>
-            await LengthPrefixedJson.WriteAsync(stream, new { Value = new string('x', 100) }, maximumFrameBytes: 10));
+            await LengthPrefixedJson.WriteAsync(
+                stream,
+                new { Value = new string('x', 100) },
+                maximumFrameBytes: 10,
+                cancellationToken: TestContext.Current.CancellationToken));
         Assert.Equal(0, stream.Length);
     }
 

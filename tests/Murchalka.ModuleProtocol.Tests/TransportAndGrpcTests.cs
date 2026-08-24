@@ -13,12 +13,16 @@ public sealed class TransportAndGrpcTests
         await using (runtime)
         await using (module)
         {
-            await runtime.SendAsync(new ProtocolFrame("challenge", Encoding.UTF8.GetBytes("hello")));
-            var received = await FirstAsync(module.ReceiveAsync());
+            await runtime.SendAsync(
+                new ProtocolFrame("challenge", Encoding.UTF8.GetBytes("hello")),
+                TestContext.Current.CancellationToken);
+            var received = await FirstAsync(module.ReceiveAsync(TestContext.Current.CancellationToken));
             Assert.Equal("challenge", received.MessageType);
 
             await Assert.ThrowsAsync<ProtocolFrameTooLargeException>(async () =>
-                await module.SendAsync(new ProtocolFrame("proof", new byte[33])));
+                await module.SendAsync(
+                    new ProtocolFrame("proof", new byte[33]),
+                    TestContext.Current.CancellationToken));
         }
     }
 
