@@ -47,6 +47,19 @@ public sealed class SchemaTests
         Assert.False(report.IsValid);
     }
 
+    [Fact]
+    public void Plain_http_is_allowed_only_for_explicit_loopback_targets()
+    {
+        var manifest = StructuredDocument.Load(Fixture("valid-module.yaml")).AsObject();
+        var outbound = manifest["permissions"]!["network"]!["outbound"]!.AsArray();
+        outbound.Add(JsonNode.Parse("""{"scheme":"http","host":"127.0.0.1","ports":[11434]}"""));
+        Assert.True(Validator().ValidateJson("module-manifest.schema.json", manifest).IsValid);
+
+        outbound[0]!["host"] = "ollama.example.com";
+
+        Assert.False(Validator().ValidateJson("module-manifest.schema.json", manifest).IsValid);
+    }
+
     private static CanonicalSchemaValidator Validator() => new(Path.Combine(AppContext.BaseDirectory, "schemas"));
     private static string Fixture(string name) => Path.Combine(AppContext.BaseDirectory, "fixtures", name);
 }
