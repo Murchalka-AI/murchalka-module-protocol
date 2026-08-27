@@ -13,7 +13,10 @@ public sealed class SchemaTests
         { "profile.schema.json", "valid-profile.yaml" },
         { "permission-grant.schema.json", "valid-grant.yaml" },
         { "module-lock.schema.json", "valid-lock.json" },
-        { "event-envelope.schema.json", "valid-event.json" }
+        { "event-envelope.schema.json", "valid-event.json" },
+        { "node-descriptor.schema.json", "valid-node-descriptor.json" },
+        { "node-task.schema.json", "valid-node-task.json" },
+        { "node-stream-message.schema.json", "valid-node-stream-message.json" }
     };
 
     [Theory]

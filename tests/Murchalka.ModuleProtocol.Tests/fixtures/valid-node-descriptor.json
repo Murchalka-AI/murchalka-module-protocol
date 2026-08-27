@@ -1,0 +1,1 @@
+{"nodeId":"node-office-mac","ownerScope":"person-owner","platform":{"operatingSystem":"macos","version":"15.0","architecture":"arm64"},"runtimeVersion":"1.0.0","labels":{"trust":"personal"},"resources":{"processorCount":12,"memoryBytes":34359738368},"capabilities":[],"attestation":{},"lastSeenAt":"2026-08-27T00:00:00Z","sequence":1}

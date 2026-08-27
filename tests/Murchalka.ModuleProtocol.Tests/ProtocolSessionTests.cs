@@ -51,6 +51,17 @@ public sealed class ProtocolSessionTests
     }
 
     [Fact]
+    public void Json_round_trip_preserves_node_identifier()
+    {
+        var nodeId = new NodeId("node-phase6-test");
+
+        var payload = ProtocolJson.Serialize(nodeId);
+        var restored = ProtocolJson.Deserialize<NodeId>(payload);
+
+        Assert.Equal(nodeId, restored);
+    }
+
+    [Fact]
     public async Task Length_prefix_rejects_oversized_payload_before_writing()
     {
         await using var stream = new MemoryStream();

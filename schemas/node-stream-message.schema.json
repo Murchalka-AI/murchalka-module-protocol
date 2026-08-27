@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.murchalka.dev/v1/node-stream-message.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["messageId", "nodeId", "kind", "sequence", "acknowledgesThrough", "occurredAt", "payload"],
+  "properties": {
+    "messageId": { "type": "string", "format": "uuid" },
+    "nodeId": { "type": "string", "pattern": "^node-[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$" },
+    "kind": { "enum": ["descriptor", "task", "taskUpdate", "cancelTask", "event", "moduleBundle", "deploymentStatus", "heartbeat", "acknowledgement"] },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "acknowledgesThrough": { "type": "integer", "minimum": 0 },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "payload": {}
+  }
+}

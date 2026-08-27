@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.murchalka.dev/v1/node-descriptor.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["nodeId", "ownerScope", "platform", "runtimeVersion", "labels", "resources", "capabilities", "attestation", "lastSeenAt", "sequence"],
+  "properties": {
+    "nodeId": { "$ref": "#/$defs/nodeId" },
+    "ownerScope": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "platform": { "type": "object", "additionalProperties": false, "required": ["operatingSystem", "version", "architecture"], "properties": { "operatingSystem": { "enum": ["linux", "windows", "macos", "android", "ios"] }, "version": { "type": "string", "minLength": 1, "maxLength": 128 }, "architecture": { "enum": ["x64", "arm64"] } } },
+    "runtimeVersion": { "$ref": "#/$defs/semver" },
+    "labels": { "type": "object", "propertyNames": { "pattern": "^[a-z][a-z0-9.-]{0,63}$" }, "additionalProperties": { "type": "string", "maxLength": 128 }, "maxProperties": 64 },
+    "resources": { "type": "object", "additionalProperties": false, "required": ["processorCount", "memoryBytes"], "properties": { "processorCount": { "type": "integer", "minimum": 1, "maximum": 4096 }, "memoryBytes": { "type": "integer", "minimum": 1 } } },
+    "capabilities": { "type": "array", "maxItems": 4096, "items": { "type": "object", "additionalProperties": false, "required": ["capabilityId", "version", "category", "providerInstance", "moduleId", "moduleVersion", "contractDigest"], "properties": { "capabilityId": { "$ref": "#/$defs/capabilityId" }, "version": { "$ref": "#/$defs/semver" }, "category": { "$ref": "#/$defs/capabilityId" }, "providerInstance": { "$ref": "#/$defs/instanceId" }, "moduleId": { "$ref": "#/$defs/moduleId" }, "moduleVersion": { "$ref": "#/$defs/semver" }, "contractDigest": { "$ref": "#/$defs/sha256" } } } },
+    "attestation": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 2048 }, "maxProperties": 64 },
+    "lastSeenAt": { "type": "string", "format": "date-time" },
+    "sequence": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "nodeId": { "type": "string", "pattern": "^node-[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$" },
+    "moduleId": { "type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$", "maxLength": 253 },
+    "capabilityId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "instanceId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

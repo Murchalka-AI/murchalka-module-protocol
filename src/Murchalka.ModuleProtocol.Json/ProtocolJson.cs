@@ -32,6 +32,7 @@ public static class ProtocolJson
         options.Converters.Add(new StringValueJsonConverter<ModuleId>(value => new ModuleId(value), value => value.Value));
         options.Converters.Add(new StringValueJsonConverter<CapabilityId>(value => new CapabilityId(value), value => value.Value));
         options.Converters.Add(new StringValueJsonConverter<InstanceId>(value => new InstanceId(value), value => value.Value));
+        options.Converters.Add(new StringValueJsonConverter<NodeId>(value => new NodeId(value), value => value.Value));
         options.Converters.Add(new StringValueJsonConverter<SemanticVersion>(SemanticVersion.Parse, value => value.ToString()));
         return options;
     }

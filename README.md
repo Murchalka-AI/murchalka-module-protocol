@@ -35,5 +35,8 @@ The supported wire protocol major is `1`. Unknown protocol or schema majors fail
 - `profile.schema.json`
 - `permission-grant.schema.json`
 - `event-envelope.schema.json`
+- `node-descriptor.schema.json`
+- `node-task.schema.json`
+- `node-stream-message.schema.json`
 
 All schemas use JSON Schema Draft 2020-12, reject unknown fields, and reserve the `extensions` object for namespaced additions.
