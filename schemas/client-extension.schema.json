@@ -22,6 +22,7 @@
         "version": { "$ref": "#/$defs/semver" },
         "targets": { "$ref": "#/$defs/targets" },
         "mode": { "enum": ["declarative", "wasm"] },
+        "componentDefinitions": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/componentDefinition" } },
         "componentTree": { "$ref": "#/$defs/component" },
         "actions": { "type": "array", "maxItems": 64, "items": { "$ref": "#/$defs/action" } },
         "accessibility": { "$ref": "#/$defs/accessibility" },
@@ -42,10 +43,24 @@
       "additionalProperties": false,
       "required": ["component"],
       "properties": {
-        "component": { "enum": ["standard.layout", "standard.text", "standard.media", "standard.form", "standard.list", "standard.action", "extension-host"] },
+        "component": { "$ref": "#/$defs/id" },
         "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
         "properties": { "type": "object", "maxProperties": 64, "additionalProperties": true },
         "children": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/component" } }
+      }
+    },
+    "componentDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "propertiesSchemaVersion", "eventsSchemaVersion", "propertiesSchema", "eventsSchema", "template"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "propertiesSchemaVersion": { "type": "integer", "minimum": 1 },
+        "eventsSchemaVersion": { "type": "integer", "minimum": 1 },
+        "propertiesSchema": { "$ref": "#/$defs/embeddedSchema" },
+        "eventsSchema": { "$ref": "#/$defs/embeddedSchema" },
+        "template": { "$ref": "#/$defs/component" }
       }
     },
     "action": {
@@ -92,6 +107,17 @@
         "algorithm": { "const": "ecdsa-p256-sha256" },
         "keyId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
         "value": { "type": "string", "contentEncoding": "base64", "minLength": 80, "maxLength": 128 }
+      }
+    },
+    "embeddedSchema": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "required": ["type"],
+      "properties": {
+        "$schema": { "const": "https://json-schema.org/draft/2020-12/schema" },
+        "$id": { "type": "string", "format": "uri", "maxLength": 512 },
+        "type": { "enum": ["object", "array", "string", "number", "integer", "boolean", "null"] }
       }
     },
     "targets": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["web", "desktop", "mobile", "xr"] } },

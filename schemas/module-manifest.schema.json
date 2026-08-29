@@ -219,8 +219,25 @@
     "uiContributions": {
       "type": "object", "additionalProperties": false,
       "properties": {
-        "components": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "version", "artifact", "schema"], "properties": { "id": { "$ref": "#/$defs/capabilityId" }, "version": { "type": "integer", "minimum": 1 }, "artifact": { "$ref": "#/$defs/localId" }, "schema": { "$ref": "#/$defs/path" } } } }
+        "components": { "type": "array", "items": { "$ref": "#/$defs/uiComponentContribution" } }
       }
+    },
+    "uiComponentContribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "artifact"],
+      "properties": {
+        "id": { "$ref": "#/$defs/capabilityId" },
+        "version": { "type": "integer", "minimum": 1 },
+        "artifact": { "$ref": "#/$defs/localId" },
+        "schema": { "$ref": "#/$defs/path" },
+        "propertiesSchema": { "$ref": "#/$defs/path" },
+        "eventsSchema": { "$ref": "#/$defs/path" }
+      },
+      "oneOf": [
+        { "required": ["schema"], "not": { "anyOf": [{ "required": ["propertiesSchema"] }, { "required": ["eventsSchema"] }] } },
+        { "required": ["propertiesSchema", "eventsSchema"], "not": { "required": ["schema"] } }
+      ]
     },
     "jobContribution": {
       "type": "object", "additionalProperties": false, "required": ["id", "scheduleCapability", "defaultSchedule", "enabledByDefault"],

@@ -4,19 +4,70 @@
   "title": "Murchalka Agent UI document v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["viewId", "version", "componentTree", "stateSchema", "bindings", "actions", "validation", "effects", "accessibility", "localization", "expiration", "securityContextRef"],
+  "required": ["viewId", "version", "componentTree", "stateSchema", "actions", "accessibility", "localization", "securityContextRef"],
   "properties": {
-    "viewId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "viewId": { "$ref": "#/$defs/id" },
     "version": { "type": "integer", "minimum": 1 },
-    "componentTree": { "type": "object" },
-    "stateSchema": { "type": "object" },
-    "bindings": { "type": "array", "maxItems": 256 },
-    "actions": { "type": "array", "maxItems": 64 },
-    "validation": { "type": "array", "maxItems": 128 },
-    "effects": { "type": "array", "maxItems": 64 },
-    "accessibility": { "type": "object" },
-    "localization": { "type": "object" },
+    "componentTree": { "$ref": "#/$defs/component" },
+    "stateSchema": { "type": "object", "minProperties": 1, "maxProperties": 128 },
+    "initialState": { "type": "object", "maxProperties": 256 },
+    "bindings": { "type": "array", "maxItems": 256, "items": { "type": "object" } },
+    "actions": { "type": "array", "maxItems": 64, "items": { "$ref": "#/$defs/action" } },
+    "validation": { "type": "array", "maxItems": 128, "items": { "type": "object" } },
+    "effects": { "type": "array", "maxItems": 64, "items": { "type": "object" } },
+    "accessibility": { "$ref": "#/$defs/accessibility" },
+    "localization": { "$ref": "#/$defs/localization" },
     "expiration": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
     "securityContextRef": { "type": "string", "minLength": 1, "maxLength": 256 }
+  },
+  "oneOf": [
+    { "required": ["expiration"], "not": { "required": ["expiresAt"] } },
+    { "required": ["expiresAt"], "not": { "required": ["expiration"] } }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component"],
+      "properties": {
+        "component": { "$ref": "#/$defs/id" },
+        "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$" },
+        "properties": { "type": "object", "maxProperties": 64 },
+        "children": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/component" } }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "inputBinding": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "effect": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["liveRegion"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "liveRegion": { "enum": ["off", "polite", "assertive"] },
+        "keyboardNavigation": { "type": "boolean" },
+        "reducedMotion": { "type": "boolean" }
+      }
+    },
+    "localization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["defaultLocale"],
+      "properties": {
+        "defaultLocale": { "type": "string", "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$", "maxLength": 35 },
+        "fallbackLocale": { "type": "string", "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$", "maxLength": 35 },
+        "messages": { "type": "object", "maxProperties": 32 }
+      }
+    }
   }
 }
