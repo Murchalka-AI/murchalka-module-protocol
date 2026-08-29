@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.murchalka.dev/v1/client-action-request.schema.json",
+  "title": "Murchalka Client Action Request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["extensionId", "actionId", "handlerModule", "idempotencyKey", "payload"],
+  "properties": {
+    "extensionId": { "$ref": "#/$defs/id" },
+    "actionId": { "$ref": "#/$defs/id" },
+    "handlerModule": { "$ref": "#/$defs/moduleId" },
+    "idempotencyKey": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "payload": true
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "moduleId": { "type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$", "maxLength": 253 }
+  }
+}

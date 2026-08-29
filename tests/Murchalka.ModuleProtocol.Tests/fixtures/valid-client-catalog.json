@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "revision": 7,
+  "generatedAt": "2026-08-29T00:00:00Z",
+  "entries": [
+    {
+      "extensionId": "client.diagnostics",
+      "extensionVersion": "0.4.0",
+      "moduleId": "dev.murchalka.client-diagnostics",
+      "moduleVersion": "0.4.0",
+      "artifactId": "client-diagnostics",
+      "artifactDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifactBytes": 1024,
+      "artifactUrl": "/client/v1/artifacts/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "mode": "declarative",
+      "targets": ["web", "desktop"],
+      "publisher": "dev.murchalka",
+      "keyId": "release-key",
+      "fallbackComponent": "standard.document"
+    }
+  ]
+}

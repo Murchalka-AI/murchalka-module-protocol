@@ -126,10 +126,12 @@
       }
     },
     "clientArtifact": {
-      "type": "object", "additionalProperties": false, "required": ["id", "target", "mode", "entrypoint", "digest"],
+      "type": "object", "additionalProperties": false, "required": ["id", "extensionId", "extensionVersion", "target", "mode", "entrypoint", "digest", "fallbackComponent"],
       "properties": {
-        "id": { "$ref": "#/$defs/localId" }, "target": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["web", "desktop", "mobile", "xr"] } },
+        "id": { "$ref": "#/$defs/localId" }, "extensionId": { "$ref": "#/$defs/capabilityId" }, "extensionVersion": { "$ref": "#/$defs/semver" },
+        "target": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["web", "desktop", "mobile", "xr"] } },
         "mode": { "enum": ["wasm", "declarative"] }, "entrypoint": { "$ref": "#/$defs/path" }, "digest": { "$ref": "#/$defs/sha256" },
+        "fallbackComponent": { "$ref": "#/$defs/capabilityId" },
         "protocolVersion": { "type": "integer", "minimum": 1 }, "requiredHostFeatures": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/localId" } },
         "resources": { "$ref": "#/$defs/resources" }
       }

@@ -1,0 +1,7 @@
+{
+  "extensionId": "client.diagnostics",
+  "actionId": "client.diagnostics.run",
+  "handlerModule": "dev.murchalka.client-diagnostics",
+  "idempotencyKey": "f76523a0-c84d-48d8-bc07-b96548f239bf",
+  "payload": { "message": "hello" }
+}

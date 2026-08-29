@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.murchalka.dev/v1/agent-ui.schema.json",
+  "title": "Murchalka Agent UI document v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["viewId", "version", "componentTree", "stateSchema", "bindings", "actions", "validation", "effects", "accessibility", "localization", "expiration", "securityContextRef"],
+  "properties": {
+    "viewId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z][a-z0-9-]*)+$", "maxLength": 160 },
+    "version": { "type": "integer", "minimum": 1 },
+    "componentTree": { "type": "object" },
+    "stateSchema": { "type": "object" },
+    "bindings": { "type": "array", "maxItems": 256 },
+    "actions": { "type": "array", "maxItems": 64 },
+    "validation": { "type": "array", "maxItems": 128 },
+    "effects": { "type": "array", "maxItems": 64 },
+    "accessibility": { "type": "object" },
+    "localization": { "type": "object" },
+    "expiration": { "type": "string", "format": "date-time" },
+    "securityContextRef": { "type": "string", "minLength": 1, "maxLength": 256 }
+  }
+}

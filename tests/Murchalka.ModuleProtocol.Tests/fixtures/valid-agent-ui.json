@@ -1,0 +1,14 @@
+{
+  "viewId": "agent.conversation",
+  "version": 1,
+  "componentTree": { "component": "standard.layout" },
+  "stateSchema": { "type": "object" },
+  "bindings": [],
+  "actions": [{ "id": "agent.turn" }],
+  "validation": [],
+  "effects": [],
+  "accessibility": { "liveRegion": "polite" },
+  "localization": { "defaultLocale": "en" },
+  "expiration": "2026-08-30T00:00:00Z",
+  "securityContextRef": "session:current"
+}

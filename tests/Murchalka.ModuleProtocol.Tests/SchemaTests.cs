@@ -16,7 +16,11 @@ public sealed class SchemaTests
         { "event-envelope.schema.json", "valid-event.json" },
         { "node-descriptor.schema.json", "valid-node-descriptor.json" },
         { "node-task.schema.json", "valid-node-task.json" },
-        { "node-stream-message.schema.json", "valid-node-stream-message.json" }
+        { "node-stream-message.schema.json", "valid-node-stream-message.json" },
+        { "client-extension.schema.json", "valid-client-extension.json" },
+        { "client-extension-catalog.schema.json", "valid-client-catalog.json" },
+        { "client-action-request.schema.json", "valid-client-action.json" },
+        { "agent-ui.schema.json", "valid-agent-ui.json" }
     };
 
     [Theory]

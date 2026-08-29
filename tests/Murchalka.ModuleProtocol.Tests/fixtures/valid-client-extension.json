@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "extension": {
+    "apiVersion": "client.murchalka.dev/v1",
+    "kind": "ClientExtension",
+    "id": "client.diagnostics",
+    "version": "0.4.0",
+    "targets": ["web", "desktop"],
+    "mode": "declarative",
+    "componentTree": {
+      "component": "standard.layout",
+      "properties": { "direction": "column" },
+      "children": [
+        { "component": "standard.text", "properties": { "text": "Client Runtime ready" } },
+        { "component": "standard.action", "properties": { "label": "Run check", "action": "client.diagnostics.run", "payload": {} } }
+      ]
+    },
+    "actions": [
+      { "id": "client.diagnostics.run", "handlerModule": "dev.murchalka.client-diagnostics", "payloadSchemaVersion": 1 }
+    ],
+    "accessibility": { "label": "Client diagnostics", "description": "Checks the Client Runtime extension path.", "liveRegion": "polite" },
+    "localization": { "defaultLocale": "en", "messages": { "en": { "title": "Client diagnostics" }, "ru": { "title": "Диагностика клиента" } } },
+    "fallbackComponent": "standard.document",
+    "propertiesSchemaVersion": 1,
+    "eventsSchemaVersion": 1
+  },
+  "signature": {
+    "algorithm": "ecdsa-p256-sha256",
+    "keyId": "release-key",
+    "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  }
+}
