@@ -20,7 +20,8 @@ public sealed class SchemaTests
         { "client-extension.schema.json", "valid-client-extension.json" },
         { "client-extension-catalog.schema.json", "valid-client-catalog.json" },
         { "client-action-request.schema.json", "valid-client-action.json" },
-        { "agent-ui.schema.json", "valid-agent-ui.json" }
+        { "agent-ui.schema.json", "valid-agent-ui.json" },
+        { "protocol-contribution.schema.json", "valid-protocol-contribution.json" }
     };
 
     [Theory]
@@ -65,6 +66,31 @@ public sealed class SchemaTests
         outbound[0]!["host"] = "ollama.example.com";
 
         Assert.False(Validator().ValidateJson("module-manifest.schema.json", manifest).IsValid);
+    }
+
+    [Fact]
+    public void Wildcard_outbound_hosts_require_transport_security()
+    {
+        var manifest = StructuredDocument.Load(Fixture("valid-module.yaml")).AsObject();
+        var outbound = manifest["permissions"]!["network"]!["outbound"]!.AsArray();
+        outbound.Add(JsonNode.Parse("""{"scheme":"https","host":"*","ports":[443]}"""));
+
+        Assert.True(Validator().ValidateJson("module-manifest.schema.json", manifest).IsValid);
+
+        outbound[0]!["scheme"] = "http";
+
+        Assert.False(Validator().ValidateJson("module-manifest.schema.json", manifest).IsValid);
+    }
+
+    [Fact]
+    public void Protocol_contribution_requires_untrusted_external_content()
+    {
+        var contribution = StructuredDocument.Load(Fixture("valid-protocol-contribution.json")).AsObject();
+        contribution["security"]!["externalContent"] = "trusted";
+
+        var report = Validator().ValidateJson("protocol-contribution.schema.json", contribution);
+
+        Assert.False(report.IsValid);
     }
 
     private static CanonicalSchemaValidator Validator() => new(Path.Combine(AppContext.BaseDirectory, "schemas"));

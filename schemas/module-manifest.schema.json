@@ -198,6 +198,7 @@
       "properties": {
         "pipelines": { "type": "array", "items": { "$ref": "#/$defs/pipelineContribution" } },
         "events": { "$ref": "#/$defs/eventContributions" }, "ui": { "$ref": "#/$defs/uiContributions" },
+        "protocols": { "type": "array", "items": { "$ref": "#/$defs/protocolContribution" } },
         "jobs": { "type": "array", "items": { "$ref": "#/$defs/jobContribution" } }
       }
     },
@@ -243,6 +244,34 @@
       "type": "object", "additionalProperties": false, "required": ["id", "scheduleCapability", "defaultSchedule", "enabledByDefault"],
       "properties": { "id": { "$ref": "#/$defs/localId" }, "scheduleCapability": { "$ref": "#/$defs/capabilityId" }, "defaultSchedule": { "type": "string", "minLength": 1, "maxLength": 128 }, "enabledByDefault": { "type": "boolean" } }
     },
+    "protocolContribution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "routeNamespace", "handler", "descriptor", "transports", "authentication", "streaming", "limits", "security"],
+      "properties": {
+        "id": { "$ref": "#/$defs/capabilityId" },
+        "version": { "type": "integer", "minimum": 1 },
+        "routeNamespace": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "handler": { "$ref": "#/$defs/capabilityId" },
+        "descriptor": { "$ref": "#/$defs/path" },
+        "transports": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["http", "sse", "websocket", "stdio"] } },
+        "authentication": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["none", "bearer", "oauth2", "mtls"] } },
+        "streaming": { "enum": ["none", "server", "duplex"] },
+        "limits": {
+          "type": "object", "additionalProperties": false, "required": ["maxPayloadBytes", "maxConcurrency", "timeout"],
+          "properties": {
+            "maxPayloadBytes": { "type": "integer", "minimum": 1, "maximum": 4194304 },
+            "maxConcurrency": { "type": "integer", "minimum": 1, "maximum": 4096 },
+            "timeout": { "$ref": "#/$defs/duration" },
+            "maxStreams": { "type": "integer", "minimum": 1, "maximum": 4096 }
+          }
+        },
+        "security": {
+          "type": "object", "additionalProperties": false, "required": ["externalContent", "privateNetwork"],
+          "properties": { "externalContent": { "const": "untrusted" }, "privateNetwork": { "enum": ["deny", "explicitAllowlist"] } }
+        },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      }
+    },
     "permissionRequest": {
       "type": "object", "additionalProperties": false,
       "properties": {
@@ -259,11 +288,12 @@
       "type": "object", "additionalProperties": false, "required": ["scheme", "host", "ports"],
       "properties": {
         "scheme": { "enum": ["http", "https", "wss", "grpc+tls"] },
-        "host": { "anyOf": [ { "type": "string", "format": "hostname" }, { "enum": ["127.0.0.1", "::1"] } ] },
+        "host": { "anyOf": [ { "type": "string", "format": "hostname" }, { "enum": ["127.0.0.1", "::1", "*"] } ] },
         "ports": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 1, "maximum": 65535 } }
       },
       "allOf": [
-        { "if": { "properties": { "scheme": { "const": "http" } } }, "then": { "properties": { "host": { "enum": ["127.0.0.1", "::1"] } } } }
+        { "if": { "properties": { "scheme": { "const": "http" } } }, "then": { "properties": { "host": { "enum": ["127.0.0.1", "::1"] } } } },
+        { "if": { "properties": { "host": { "const": "*" } } }, "then": { "properties": { "scheme": { "enum": ["https", "wss", "grpc+tls"] } } } }
       ]
     },
     "healthProbe": {

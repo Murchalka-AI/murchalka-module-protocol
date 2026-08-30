@@ -1,0 +1,20 @@
+{
+  "id": "protocol.mcp.http",
+  "version": 1,
+  "routeNamespace": "mcp",
+  "handler": "protocol.mcp.route",
+  "descriptor": "schemas/protocols/mcp.json",
+  "transports": ["http", "sse"],
+  "authentication": ["bearer", "oauth2", "mtls"],
+  "streaming": "server",
+  "limits": {
+    "maxPayloadBytes": 262144,
+    "maxConcurrency": 64,
+    "timeout": "2m",
+    "maxStreams": 32
+  },
+  "security": {
+    "externalContent": "untrusted",
+    "privateNetwork": "deny"
+  }
+}

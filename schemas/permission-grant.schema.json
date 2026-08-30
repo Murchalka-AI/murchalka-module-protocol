@@ -37,7 +37,7 @@
       "type": "object", "additionalProperties": false,
       "properties": {
         "network": { "type": "object", "additionalProperties": false, "properties": { "outbound": { "type": "array", "items": { "$ref": "#/$defs/networkRule" } } } },
-        "secrets": { "type": "array", "items": { "$ref": "#/$defs/secretGrant" } },
+        "secrets": { "type": "array", "uniqueItems": true, "items": { "oneOf": [ { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]{0,255}$" }, { "$ref": "#/$defs/secretGrant" } ] } },
         "data": { "type": "object", "additionalProperties": false, "properties": { "read": { "$ref": "#/$defs/stringSet" }, "write": { "$ref": "#/$defs/stringSet" } } },
         "capabilities": { "type": "object", "additionalProperties": false, "properties": { "invoke": { "type": "array", "items": { "oneOf": [ { "$ref": "#/$defs/capabilityId" }, { "type": "object", "additionalProperties": false, "required": ["category"], "properties": { "category": { "$ref": "#/$defs/capabilityId" } } } ] } } } },
         "filesystem": { "type": "object", "additionalProperties": false, "properties": { "read": { "$ref": "#/$defs/stringSet" }, "write": { "$ref": "#/$defs/stringSet" } } },
@@ -46,8 +46,8 @@
     },
     "networkRule": {
       "type": "object", "additionalProperties": false, "required": ["scheme", "host", "ports"],
-      "properties": { "scheme": { "enum": ["http", "https", "wss", "grpc+tls"] }, "host": { "anyOf": [ { "type": "string", "format": "hostname" }, { "enum": ["127.0.0.1", "::1"] } ] }, "ports": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 1, "maximum": 65535 } } },
-      "allOf": [ { "if": { "properties": { "scheme": { "const": "http" } } }, "then": { "properties": { "host": { "enum": ["127.0.0.1", "::1"] } } } } ]
+      "properties": { "scheme": { "enum": ["http", "https", "wss", "grpc+tls"] }, "host": { "anyOf": [ { "type": "string", "format": "hostname" }, { "enum": ["127.0.0.1", "::1", "*"] } ] }, "ports": { "type": "array", "minItems": 1,"uniqueItems": true, "items": { "type": "integer", "minimum": 1, "maximum": 65535 } } },
+      "allOf": [ { "if": { "properties": { "scheme": { "const": "http" } } }, "then": { "properties": { "host": { "enum": ["127.0.0.1", "::1"] } } } }, { "if": { "properties": { "host": { "const": "*" } } }, "then": { "properties": { "scheme": { "enum": ["https", "wss", "grpc+tls"] } } } } ]
     },
     "secretGrant": {
       "type": "object", "additionalProperties": false, "required": ["reference", "operations", "delivery"],
